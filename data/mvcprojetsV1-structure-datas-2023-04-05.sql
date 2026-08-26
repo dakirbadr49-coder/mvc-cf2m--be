@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `actif` tinyint(3) UNSIGNED DEFAULT 0 COMMENT '0 => inactif\n1  => actif\n2 => banni',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `user`
@@ -144,7 +144,8 @@ INSERT INTO `user` (`id`, `username`, `usermail`, `userpwd`, `userscreen`, `user
 (1, 'michaeljpitz', 'michael.pitz@cf2m.be', '$2y$10$KYbexAa0gbqSZax/RsK7V.rQ23CPy5im1rwo3v5VfW23DGrO/GlUm', 'Michaël Pitz', 'php_63e608cc756556.00239810', 1),
 (2, 'pierresandron', 'pierre.sandron@cf2m.be', '$2y$10$h02u1E3QfzqInuQupysvA.eYQZ4mBrDh4PblaNvpUiTnIXL60oEvq', 'Pierre Sandron', 'php_63e6095a9828f3.13666748', 1),
 (3, 'clovisreuss', 'webprod@cf2m.be', '$2y$10$QrXku6rYE9M09.UESZnYUO3HW5L4dynMftQm7tZ9AFZIpGfwJgYsO', 'Clovis Reuss', 'php_63e60ac4dfd358.31228917', 0),
-(4, 'andrepalmisano', 'andre.palmisano@cf2m.be', '$2y$10$chNKn69X0oJl/lnJdXctwe54HZYzdpD8ngZuULLBWUz/jMlg3VKga', 'André Palmisano', 'php_63e60bbf70fce4.56128222', 0);
+(4, 'andrepalmisano', 'andre.palmisano@cf2m.be', '$2y$10$chNKn69X0oJl/lnJdXctwe54HZYzdpD8ngZuULLBWUz/jMlg3VKga', 'André Palmisano', 'php_63e60bbf70fce4.56128222', 0),
+(5, 'badrdakir', 'dosbafr@gmail.com', '$2y$10$d83T3XVvyg6Y4p8/W6NYr.IfM3QTXF3/cUqGLM4vthPd6fI9llzpe', 'Badr Dakir', 'php_66f1a2b3c4d5e6.78901234', 1);
 
 --
 -- Contraintes pour les tables déchargées
