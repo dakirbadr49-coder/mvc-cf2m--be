@@ -1,5 +1,7 @@
 <?php
-// 52 ) que récupère-t-on?
+// 52 ) recupere les posts visibles (accueil) avec auteur (INNER JOIN user)
+// et leurs categories regroupees via GROUP_CONCAT (category_has_post)
+// tries par date de creation puis id, decroissant
 function postHomepageAll(PDO $db): array{
     $sql = "SELECT p.id, p.title, LEFT(p.content, 255) AS contentshort, p.datecreate, u.id AS iduser, u.userscreen, 
     GROUP_CONCAT(c.id) AS idcategory, 
@@ -28,7 +30,8 @@ function postHomepageAll(PDO $db): array{
     return $bp;
 }
 
-// 53 ) que récupère-t-on
+// 53 ) recupere un post complet (contenu entier, pas tronque) par son id
+// avec auteur et categories ; requete preparee car $id est externe
 function postOneById(PDO $db, int $id): array|bool{
     // si mauvais format : 0
     // $id = (int) $id;
@@ -60,7 +63,9 @@ function postOneById(PDO $db, int $id): array|bool{
 
 }
 
-// 54 ) que récupère-t-on
+// 54 ) recupere les posts filtres par une categorie (WHERE c.id)
+// alias c2/h2 en double jointure pour afficher TOUTES les categories
+// du post, pas seulement celle utilisee pour le filtre
 function postByCategoryId(PDO $db,int $idcateg): array{
     $sql = "SELECT p.id, p.title, LEFT(p.content, 255) AS contentshort, p.datecreate, u.id AS iduser, u.userscreen, 
     GROUP_CONCAT(c2.id) AS idcategory, 
@@ -93,7 +98,8 @@ function postByCategoryId(PDO $db,int $idcateg): array{
     return $return;
 }
 
-// 55) que récupère-t-on
+// 55) recupere tous les posts d'un utilisateur (WHERE u.id)
+// avec leurs categories regroupees, tries par date decroissante
 function postByUserId(PDO $db,int $iduser): array{
     $sql = "SELECT p.id, p.title, LEFT(p.content, 255) AS contentshort, p.datecreate, u.id AS iduser, u.userscreen, 
     GROUP_CONCAT(c.id) AS idcategory, 
@@ -120,12 +126,14 @@ function postByUserId(PDO $db,int $iduser): array{
     return $return;
 }
 
-// 56) que fait cette fonction ?
+// 56) cherche le dernier espace (strrpos) puis coupe avant
+// evite de tronquer un mot en plein milieu (ex: extrait de contenu)
     function trunCate (string $text): string{
     $cut = strrpos($text, ' ');
     return substr ($text, 0,$cut);
 }
-// 57) que fait cette fonction
+// 57) formate la date via strtotime()+date() (jours/mois en anglais)
+// puis remplace ces noms anglais par leurs equivalents francais
   function dateToFrench(string $date, string $format="l j F Y \à h \h i "): string{
     $english_days = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
     $french_days = array('lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche');
@@ -138,7 +146,8 @@ function postByUserId(PDO $db,int $iduser): array{
 ADMIN FUNCTIONS
     */
 
-// 58) que récupère-t-on
+// 58) comme postHomepageAll mais sans filtre "visible" (vue admin)
+// LEFT JOIN user pour ne pas exclure un post sans auteur valide
 function postAdminHomepageAll(PDO $db): array{
     $sql = "SELECT p.id, p.title, LEFT(p.content, 255) AS contentshort, p.datecreate, p.visible,
     u.id AS iduser, u.userscreen, 
@@ -169,7 +178,8 @@ function postAdminHomepageAll(PDO $db): array{
     return $bp;
 }
 
-// 59) que fait cette fonction ?
+// 59) met a jour la colonne "visible" d'un post (publie/masque)
+// renvoie rowCount() : nombre de lignes affectees (0 ou 1)
 function postAdminUpdateVisible(PDO $db, int $id, int $visible):bool{
     $sql="UPDATE `post` SET `visible` = ? WHERE `id` = ?;";
     $prepare = $db->prepare($sql);
@@ -181,7 +191,8 @@ function postAdminUpdateVisible(PDO $db, int $id, int $visible):bool{
     return $prepare->rowCount();
 }
 
-// 60 ) que fait cette fonction ?
+// 60 ) supprime un post par id via exec() (pas de prepare ici)
+// $id est deja type int en parametre, donc pas de risque d'injection
 function postAdminDeleteById(PDO $db, int $id): bool {
     // pour utiliser l'exec plutôt que le prepare/execute, mauvaise pratique
     $sql="DELETE FROM `post` WHERE id=$id";
@@ -195,7 +206,8 @@ function postAdminDeleteById(PDO $db, int $id): bool {
 
 }
 
-//  61 ) que fait cette fonction ?
+//  61 ) transaction : insere le post, recupere lastInsertId()
+// puis insere chaque categorie valide dans category_has_post
 function postAdminInsert(PDO $db, int $idUser, string $title, string $content, array $idCateg=[]):bool{
     // début de transaction, arrête les autocommit, il faut appeler $db->commit() pour que toutes les requêtes soient effectivement validées
     $db->beginTransaction();
@@ -250,7 +262,9 @@ if(!empty($idCateg)){
 
 }
 
-// 62 ) que fait cette fonction ?
+// 62 ) valide/nettoie les champs du formulaire (extract + htmlspecialchars)
+// puis met a jour le post et remplace ses categories (delete + insert)
+// le tout dans une transaction
 function postAdminUpdate(PDO $db, array $postForm): bool|string {
     // on est ICI et aucune variable n'a PAS été vérifiée !
     # var_dump($postForm); 
