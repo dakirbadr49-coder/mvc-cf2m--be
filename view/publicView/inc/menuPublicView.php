@@ -14,6 +14,7 @@
                 endforeach;
                 ?>
                 <li class="nav-item"><a class="nav-link" href="./?connect">Connexion</a></li>
+                <li class="nav-item d-flex align-items-center"><button type="button" class="theme-toggle nav-link" title="Mode jour / nuit">🌙</button></li>
             </ul>
         </div>
     </div>

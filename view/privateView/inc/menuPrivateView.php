@@ -8,6 +8,7 @@
                 <li class="nav-item"><a class="nav-link active" href="./">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="./?createPost">Créer un nouvel article</a></li>
                 <li class="nav-item"><a class="nav-link" href="./?disconnect">Déconnexion</a></li>
+                <li class="nav-item d-flex align-items-center"><button type="button" class="theme-toggle nav-link" title="Mode jour / nuit">🌙</button></li>
             </ul>
         </div>
     </div>
