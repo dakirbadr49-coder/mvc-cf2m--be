@@ -11286,3 +11286,35 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+/* ===== Mode jour / nuit ===== */
+:root[data-theme="dark"] {
+  --bs-body-bg: #17181c;
+  --bs-body-color: #e8e9eb;
+  --bs-border-color: #3a3b40;
+}
+:root[data-theme="dark"] a {
+  color: #6ea8fe;
+}
+:root[data-theme="dark"] a:hover {
+  color: #9ec5fe;
+}
+:root[data-theme="dark"] .badge.bg-secondary {
+  background-color: #495057 !important;
+}
+:root[data-theme="dark"] .form-control {
+  background-color: #24262b;
+  color: var(--bs-body-color);
+  border-color: #3a3b40;
+}
+:root[data-theme="dark"] .text-muted {
+  color: #9a9ca1 !important;
+}
+
+.theme-toggle {
+  background: none;
+  border: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}

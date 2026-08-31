@@ -112,7 +112,7 @@ function postByUserId(PDO $db,int $iduser): array{
         LEFT JOIN category c 
             ON c.id = h.category_id
        
-        WHERE u.id = ?
+        WHERE u.id = ? and p.visible = 1
             GROUP BY p.id
     ORDER BY p.datecreate DESC;";
     $prepare = $db->prepare($sql);
